@@ -18,6 +18,6 @@
 28: BNE $al $zero 0xFFFB
 2c: ADDU $v0 $v0 $v1
 30: JR $ra
-34:
+34: NOP
 38: JR $ra
 3c: ADDIU $v0 $zero 0xFFFF
