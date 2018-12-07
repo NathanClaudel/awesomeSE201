@@ -80,7 +80,7 @@ La valeur de v0 devient 0xFFFF avec extension de signe.
 
 
 **But de la fonction :**  
-Retourner le nombre de caractères et espaces d'une chaînes de caractères.  
+Retourner le nombre de caractères sauf les espaces d'une chaînes de caractères.  
 
 
 ## 2. MIPS Tool Chain
@@ -88,5 +88,24 @@ Retourner le nombre de caractères et espaces d'une chaînes de caractères.
 
 Code C équivalent  à la fonction :  
 ```
+int f(char *str)
+{
+    if(str == 0) return -1;
 
+    char a1 = *str;
+
+    int cpt = 0;
+
+    while(a1 != 0)
+    {
+        if(a1 != 0x20) cpt++;
+
+        str ++;
+        a1 = *str;
+    }
+
+    return cpt;
+}  
 ```
+
+Code assembleur obtenue en désassemblant le programme C :
