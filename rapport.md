@@ -159,4 +159,28 @@ b0:	03e00008 	jr	ra
 b4:	00000000 	nop
 ```
 
-On voit a de nombreuses reprises des instructions lw avec fp (qui est synonyme de s8).
+On voit a de nombreuses reprises des instructions lw avec s8. s8 est aussi nommé fp (frame pointer). C'est ce registre qui sert a sauvegarder l'adresse du stack pointer avant l'appel d'une fonction.
+Ici il est surtout utilisé comme point de référence pour stocker ou charger des mots de 32bits (sw et lw) ou des octets (sb et lb) en ajoutant un offset le tout dans la pile plutôt que dans la mémoire.
+
+
+Compiler avec des optimisations réduit et le code et en O3 il n'y a plus de référence à s8.
+```
+0:	1080000f 	beqz	a0,40 <f+0x40>
+4:	00000000 	nop
+8:	80830000 	lb	v1,0(a0)
+c:	00000000 	nop
+10:	10600009 	beqz	v1,38 <f+0x38>
+14:	00001025 	move	v0,zero
+18:	24050020 	li	a1,32
+1c:	10650002 	beq	v1,a1,28 <f+0x28>
+20:	24840001 	addiu	a0,a0,1
+24:	24420001 	addiu	v0,v0,1
+28:	80830000 	lb	v1,0(a0)
+2c:	00000000 	nop
+30:	1460fffa 	bnez	v1,1c <f+0x1c>
+34:	00000000 	nop
+38:	03e00008 	jr	ra
+3c:	00000000 	nop
+40:	03e00008 	jr	ra
+44:	2402ffff 	li	v0,-1
+```
