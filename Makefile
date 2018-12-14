@@ -4,7 +4,7 @@ CFLAGS = -mips1 -mfp32 -g
 
 mips_program.s:
 %.s: %.o
-	$(OBJDUMP) -d $*.o > $*.s
+	$(OBJDUMP) -g -d $*.o > $*.s
 
 clean:
 	rm -rf *.o *.s

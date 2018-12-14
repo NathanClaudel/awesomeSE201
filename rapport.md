@@ -4,7 +4,7 @@
 
 0: 1080000d   
 BEQ $a0 *(registre4)* $zero *(registre0)* 0x000d    
-Si le premier argument de la fonction est nul, on saute à l'instruction 38.   
+Si le premier argument de la fonction est nul, on saute à l'instruction 0x38.   
 
 
 4: 00000000   
@@ -22,7 +22,7 @@ NOP
 
 10: 10a00007   
 BEQ $a1 *(registre5)* $zero *(registre0)* 0x0007     
-Si la valeur du registre a1 est nulle, on saute à l'instruction 20.  
+Si la valeur du registre a1 est nulle, on saute à l'instruction 0x20.  
 
 
 14: 00001025   
@@ -37,12 +37,12 @@ Incrémentation de 1 de la valeur se trouvant dans le registre a0.
 
 1c: 38a30020  
 XORI $v1 *(registre3)* $a1 *(registre5)* 0x0020   
-On met dans le registre v1 le résultat de l'opération xor entre la valeur du registre a1 et 20.   
+On met dans le registre v1 le résultat de l'opération xor entre la valeur du registre a1 et 0x20.   
 
 
 20: 80850000  
 LB $a1 *(registre5)* 0x0000 $a0 *(registre4)*  
-On charge dans le registre a1 ce qui se trouve ne mémoire à l'adresse a0 (a1<-Mém[a0]) avec une extension de signe.  
+On charge dans le registre a1 ce qui se trouve en mémoire à l'adresse a0 (a1<-Mém[a0]) avec une extension de signe.  
 
 
 24: 0003182b  
