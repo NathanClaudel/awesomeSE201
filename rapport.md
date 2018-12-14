@@ -111,85 +111,76 @@ int f(char *str)
 
 Code assembleur obtenue en désassemblant le programme C :
 ```
-.file	1 "mips_program.c"
-.section .mdebug.abi32
-.previous
-.nan	legacy
-.module	fp=xx
-.module	nooddspreg
-.abicalls
-.text
-.align	2
-.globl	f
-.set	nomips16
-.set	nomicromips
-.ent	f
-.type	f, @function
-f:
-.frame	$fp,16,$31		# vars= 8, regs= 1/0, args= 0, gp= 0
-.mask	0x40000000,-4
-.fmask	0x00000000,0
-.set	noreorder
-.set	nomacro
-
-addiu	$sp,$sp,-16
-sw	$fp,12($sp)
-move	$fp,$sp
-sw	$4,16($fp)
-lw	$2,16($fp)
-bne	$2,$0,$L2
-nop
-
-li	$2,-1			# 0xffffffffffffffff
-.option	pic0
-b	$L3
-nop
-
-.option	pic2
-$L2:
-lw	$2,16($fp)
-lbu	$2,0($2)
-sb	$2,3($fp)
-sw	$0,4($fp)
-.option	pic0
-b	$L4
-nop
-
-.option	pic2
-$L6:
-lb	$3,3($fp)
-li	$2,32			# 0x20
-beq	$3,$2,$L5
-nop
-
-lw	$2,4($fp)
-addiu	$2,$2,1
-sw	$2,4($fp)
-$L5:
-lw	$2,16($fp)
-addiu	$2,$2,1
-sw	$2,16($fp)
-lw	$2,16($fp)
-lbu	$2,0($2)
-sb	$2,3($fp)
-$L4:
-lb	$2,3($fp)
-bne	$2,$0,$L6
-nop
-
-lw	$2,4($fp)
-$L3:
-move	$sp,$fp
-lw	$fp,12($sp)
-addiu	$sp,$sp,16
-jr	$31
-nop
-
-.set	macro
-.set	reorder
-.end	f
-.size	f, .-f
-.ident	"GCC: (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0"
+0:	27bdfff0 	addiu	sp,sp,-16
+4:	afbe000c 	sw	s8,12(sp)
+8:	03a0f025 	move	s8,sp
+c:	afc40010 	sw	a0,16(s8)
+10:	8fc20010 	lw	v0,16(s8)
+14:	00000000 	nop
+18:	14400004 	bnez	v0,2c <f+0x2c>
+1c:	00000000 	nop
+20:	2402ffff 	li	v0,-1
+24:	1000001f 	b	a4 <f+0xa4>
+28:	00000000 	nop
+2c:	8fc20010 	lw	v0,16(s8)
+30:	00000000 	nop
+34:	90420000 	lbu	v0,0(v0)
+38:	00000000 	nop
+3c:	a3c20003 	sb	v0,3(s8)
+40:	afc00004 	sw	zero,4(s8)
+44:	10000012 	b	90 <f+0x90>
+48:	00000000 	nop
+4c:	83c30003 	lb	v1,3(s8)
+50:	24020020 	li	v0,32
+54:	10620005 	beq	v1,v0,6c <f+0x6c>
+58:	00000000 	nop
+5c:	8fc20004 	lw	v0,4(s8)
+60:	00000000 	nop
+64:	24420001 	addiu	v0,v0,1
+68:	afc20004 	sw	v0,4(s8)
+6c:	8fc20010 	lw	v0,16(s8)
+70:	00000000 	nop
+74:	24420001 	addiu	v0,v0,1
+78:	afc20010 	sw	v0,16(s8)
+7c:	8fc20010 	lw	v0,16(s8)
+80:	00000000 	nop
+84:	90420000 	lbu	v0,0(v0)
+88:	00000000 	nop
+8c:	a3c20003 	sb	v0,3(s8)
+90:	83c20003 	lb	v0,3(s8)
+94:	00000000 	nop
+98:	1440ffec 	bnez	v0,4c <f+0x4c>
+9c:	00000000 	nop
+a0:	8fc20004 	lw	v0,4(s8)
+a4:	03c0e825 	move	sp,s8
+a8:	8fbe000c 	lw	s8,12(sp)
+ac:	27bd0010 	addiu	sp,sp,16
+b0:	03e00008 	jr	ra
+b4:	00000000 	nop
 ```
 
-On voit a de nombreuses reprises des instructions lw avec fp (qui est synonyme de s8).
+On voit a de nombreuses reprises des instructions lw avec s8. s8 est aussi nommé fp (frame pointer). C'est ce registre qui sert a sauvegarder l'adresse du stack pointer avant l'appel d'une fonction.
+Ici il est surtout utilisé comme point de référence pour stocker ou charger des mots de 32bits (sw et lw) ou des octets (sb et lb) en ajoutant un offset le tout dans la pile plutôt que dans la mémoire.
+
+
+Compiler avec des optimisations réduit et le code et en O3 il n'y a plus de référence à s8.
+```
+0:	1080000f 	beqz	a0,40 <f+0x40>
+4:	00000000 	nop
+8:	80830000 	lb	v1,0(a0)
+c:	00000000 	nop
+10:	10600009 	beqz	v1,38 <f+0x38>
+14:	00001025 	move	v0,zero
+18:	24050020 	li	a1,32
+1c:	10650002 	beq	v1,a1,28 <f+0x28>
+20:	24840001 	addiu	a0,a0,1
+24:	24420001 	addiu	v0,v0,1
+28:	80830000 	lb	v1,0(a0)
+2c:	00000000 	nop
+30:	1460fffa 	bnez	v1,1c <f+0x1c>
+34:	00000000 	nop
+38:	03e00008 	jr	ra
+3c:	00000000 	nop
+40:	03e00008 	jr	ra
+44:	2402ffff 	li	v0,-1
+```
