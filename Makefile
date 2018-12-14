@@ -2,6 +2,7 @@ CC = mips-linux-gnu-gcc
 OBJDUMP = mips-linux-gnu-objdump
 CFLAGS = -mips1 -mfp32 -g
 
+mips_program.s:
 %.s: %.o
 	$(OBJDUMP) -d $*.o > $*.s
 
