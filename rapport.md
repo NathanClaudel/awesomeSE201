@@ -108,4 +108,5 @@ int f(char *str)
 }  
 ```
 
+
 Code assembleur obtenue en désassemblant le programme C :
