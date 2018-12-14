@@ -108,6 +108,7 @@ int f(char *str)
 }  
 ```
 
+
 Code assembleur obtenue en désassemblant le programme C :
 ```
 .file	1 "mips_program.c"
