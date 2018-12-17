@@ -1,4 +1,4 @@
-int __attribute__((naked)) f(char *str)
+int f(char *str)
 {
     if(str == 0) return -1;
     
