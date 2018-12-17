@@ -193,11 +193,25 @@ c:	00000000 	nop
 | 0x4  | nop                  | 0x200 | 0x0  | 0x0 | 0x0  | Rien                                                                |
 | 0x8  | lb a1, 0x0, a0       | 0x200 | 0x61 | 0x0 | 0x0  | Chargement dans a1 la valueur à l'adresse a0                        |
 | 0xc  | nop                  | 0x200 | 0x61 | 0x0 | 0x0  | Rien                                                                |
-| 0x10 | beq a1, zero, 0x7    | 0x200 | 0x61 | 0x0 | 0x0  | Si a1 == 0, on branche à 0x20. Résulat: faux                        |
+| 0x10 | beq a1, zero, 0x7    | 0x200 | 0x61 | 0x0 | 0x0  | Si a1 = 0, on branche à 0x20. Résulat: faux                         |
 | 0x14 | or v0, zero, zero    | 0x200 | 0x61 | 0x0 | 0x0  | v0 <- 0                                                             |
 | 0x18 | addiu a0, a0, 1      | 0x201 | 0x61 | 0x0 | 0x0  | a0 <- a0 + 1                                                        |
 | 0x1c | xori v1, a1, 0x20    | 0x201 | 0x61 | 0x0 | 0x41 | v1 <- a1 ^ 0x20                                                     |
 | 0x20 | lb a1, 0x0, a0       | 0x201 | 0x20 | 0x0 | 0x41 | a1 reçoit l'octet présent à l'adresse a0.                           |
 | 0x24 | sltu v1 zero v1      | 0x201 | 0x20 | 0x0 | 0x1  | Si v1 > 0, v1 = 1 sinon v1 = 0. Résultat: v1 <- 1                   |
-| 0x28 | bne a1 zero 0xfffb   |       |      |     |      | Si a1 != 0, branchement à 0x18. Résultat: vrai (branchement)        |
-|      |                      |       |      |     |      |                                                                     |
+| 0x28 | bne a1 zero 0xfffb   | 0x201 | 0x20 | 0x0 | 0x1  | Si a1 != 0, branchement à 0x18. Résultat: vrai (branchement)        |
+| 0x2c | addu v0 v0 v1        | 0x201 | 0x20 | 0x1 | 0x1  | v0 <- v0 + v1                                                       |
+| 0x18 | addiu a0 a0 0x1      | 0x202 | 0x20 | 0x1 | 0x1  | a0 <- a0 + 1                                                        |
+| 0x1c | xori v1 a1 0x20      | 0x202 | 0x20 | 0x1 | 0x0  | v1 <- a1 ^ 0x20                                                     |
+| 0x20 | lb a1 0x0 a0         | 0x202 | 0x62 | 0x1 | 0x0  | a1 reçoit la l'octet présent à l'adresse de a0                      |
+| 0x24 | sltu v1 zero v1      | 0x202 | 0x62 | 0x1 | 0x0  | Si v1 > 0, v1 = 1 sinon v1 = 0. Résultat: v1 <- 0                   |
+| 0x28 | bne a1 zero 0xfffb   | 0x202 | 0x62 | 0x1 | 0x0  | Si a1 != 0, branchement à 0x18. Résultat: vrai (branchement)        |
+| 0x2c | addu v0 v0 v1        | 0x202 | 0x62 | 0x1 | 0x0  | v0 <- v0 + v1                                                       |
+| 0x18 | addiu a0 a0 0x1      | 0x203 | 0x62 | 0x1 | 0x0  | a0 <- a0 + 1                                                        |
+| 0x1c | xori v1 a1 0x20      | 0x203 | 0x62 | 0x1 | 0x42 | v1 <- a1 ^ 0x20                                                     |
+| 0x20 | lb a1 0x0 a0         | 0x203 | 0x0  | 0x1 | 0x42 | a1 reçoit la l'octet présent à l'adresse de a0                      |
+| 0x24 | sltu v1 zero v1      | 0x203 | 0x0  | 0x1 | 0x1  | Si v1 > 0, v1 = 1 sinon v1 = 0. Résultat: v1 <- 1                   |
+| 0x28 | bne a1 zero 0xfffb   | 0x203 | 0x0  | 0x1 | 0x1  | Si a1 != 0, branchement à 0x18. Résultat: faux (pas de branchement) |
+| 0x2c | addu v0 v0 v1        | 0x202 | 0x62 | 0x1 | 0x2  | v0 &lt;- v0 + v1                                                    |
+| 0x30 | jr ra                | 0x202 | 0x62 | 0x1 | 0x2  | Retour de la fonction                                               |
+| 0x34 | nop                  | 0x202 | 0x62 | 0x1 | 0x2  | Rien     
